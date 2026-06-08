@@ -192,22 +192,28 @@ function setupTunnels() {
     exitDirX: 0, exitDirY: 1   // salida hacia ABAJO
   });
 
-  // Par 2: izquierda de la salida <-> (ROWS-1, 1)  [esquina inferior izquierda +1 a la derecha]
-  if (exitCell && typeof exitCell.r !== 'undefined') {
-    const leftOfExit = { r: exitCell.r, c: exitCell.c - 1 };
-    // Aseguramos que esté dentro del laberinto
-    if (leftOfExit.c >= 0 && leftOfExit.c < COLS) {
+
+
+
+    // Par 2: izquierda de la salida <-> esquina inferior izquierda (fila 20, columna 0)
+    if (exitCell && exitCell.c > 0) {
+      const leftOfExit = { r: exitCell.r, c: exitCell.c - 1 };
       tunnels.push({
         r: leftOfExit.r, c: leftOfExit.c,
-        targetR: ROWS-1, targetC: 0,   // ← ahora columna 0
-        exitDirX: 1, exitDirY: 0
+        targetR: ROWS-1, targetC: 0,
+        exitDirX: 1, exitDirY: 0   // salida hacia la derecha
       });
       tunnels.push({
-        r: ROWS-1, c: 0,               // ← ahora columna 0
+        r: ROWS-1, c: 0,
         targetR: leftOfExit.r, targetC: leftOfExit.c,
-        exitDirX: 1, exitDirY: 0
+        exitDirX: 1, exitDirY: 0   // salida hacia la derecha
       });
     }
+
+
+
+
+   
   }
 }
 
