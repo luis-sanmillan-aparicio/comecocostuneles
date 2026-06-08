@@ -198,16 +198,21 @@ function setupTunnels() {
     // Par 2: izquierda de la salida <-> esquina inferior izquierda (fila 20, columna 0)
     if (exitCell && exitCell.c > 0) {
       const leftOfExit = { r: exitCell.r, c: exitCell.c - 1 };
-      tunnels.push({
-        r: leftOfExit.r, c: leftOfExit.c,
-        targetR: ROWS-1, targetC: 0,
-        exitDirX: 1, exitDirY: 0   // salida hacia la derecha
-      });
-      tunnels.push({
-        r: ROWS-1, c: 0,
-        targetR: leftOfExit.r, targetC: leftOfExit.c,
-        exitDirX: 1, exitDirY: 0   // salida hacia la derecha
-      });
+      
+       // Par 2: izquierda fila1, col0 <-> derecha fila1, col19
+       tunnels.push({
+         r: 1, c: 0,
+         targetR: 1, targetC: 19,
+         exitDirX: 1, exitDirY: 0   // salida hacia la derecha (desde pared izquierda)
+       });
+       tunnels.push({
+         r: 1, c: 19,
+         targetR: 1, targetC: 0,
+         exitDirX: -1, exitDirY: 0  // salida hacia la izquierda (desde pared derecha)
+       });
+     
+     
+      
     }
 
 
