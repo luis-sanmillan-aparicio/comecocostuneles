@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -194,27 +193,27 @@ function setupTunnels() {
     exitDirX: 0, exitDirY: 1   // salida hacia ABAJO
   });
 
-  // Par 2: izquierda fila1, col0 <-> derecha fila1, col19
+  // Par 2: izquierda fila1, col0 <-> izquierda fila19, col0 (borde izquierdo)
   // Forzar que esas celdas sean muros (para que se vea el agujero)
   if (maze[1] && maze[1][0] !== undefined) maze[1][0] = 1;
-  if (maze[1] && maze[1][19] !== undefined) maze[1][19] = 1;
+  if (maze[19] && maze[19][0] !== undefined) maze[19][0] = 1;
   // Eliminar posibles puntos o ítems en esas celdas
   dots = dots.filter(d => !(d.r === 1 && d.c === 0));
-  dots = dots.filter(d => !(d.r === 1 && d.c === 19));
+  dots = dots.filter(d => !(d.r === 19 && d.c === 0));
   apples = apples.filter(a => !(a.r === 1 && a.c === 0));
-  apples = apples.filter(a => !(a.r === 1 && a.c === 19));
-  if (dynamite && ((dynamite.r === 1 && dynamite.c === 0) || (dynamite.r === 1 && dynamite.c === 19))) dynamite = null;
-  if (heart && ((heart.r === 1 && heart.c === 0) || (heart.r === 1 && heart.c === 19))) heart = null;
+  apples = apples.filter(a => !(a.r === 19 && a.c === 0));
+  if (dynamite && ((dynamite.r === 1 && dynamite.c === 0) || (dynamite.r === 19 && dynamite.c === 0))) dynamite = null;
+  if (heart && ((heart.r === 1 && heart.c === 0) || (heart.r === 19 && heart.c === 0))) heart = null;
 
   tunnels.push({
     r: 1, c: 0,
-    targetR: 1, targetC: 19,
-    exitDirX: 1, exitDirY: 0   // salida hacia la derecha (desde pared izquierda)
+    targetR: 19, targetC: 0,
+    exitDirX: 1, exitDirY: 0   // salida hacia la derecha
   });
   tunnels.push({
-    r: 1, c: 19,
+    r: 19, c: 0,
     targetR: 1, targetC: 0,
-    exitDirX: -1, exitDirY: 0  // salida hacia la izquierda (desde pared derecha)
+    exitDirX: 1, exitDirY: 0   // salida hacia la derecha
   });
 }
 // ---------- FIN TÚNELES ----------
@@ -392,7 +391,7 @@ function initLevel() {
     }
   }
 
-  // Configurar túneles (después de tener el maze y los items)
+  // Configurar túneles (después de tener maze y items)
   setupTunnels();
 
   gameOver = false;
