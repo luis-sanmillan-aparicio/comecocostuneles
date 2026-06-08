@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -168,7 +169,7 @@ let mouthAngle = 0, mouthOpen = true;
 let touchStartX = 0, touchStartY = 0;
 
 // ---------- TÚNELES ----------
-let tunnels = []; // cada túnel: {r,c, targetR, targetC, exitDirX, exitDirY}
+let tunnels = [];
 
 function isTunnelCell(r,c) {
   return tunnels.some(t => t.r === r && t.c === c);
@@ -180,7 +181,8 @@ function getTunnelTarget(r,c) {
 
 function setupTunnels() {
   tunnels = [];
-  // Par 1: arriba inicio <-> arriba derecha
+  
+  // Par 1: arriba inicio (0,1) <-> arriba derecha (0,19)
   tunnels.push({
     r: 0, c: 1,
     targetR: 0, targetC: 19,
@@ -192,36 +194,29 @@ function setupTunnels() {
     exitDirX: 0, exitDirY: 1   // salida hacia ABAJO
   });
 
+  // Par 2: izquierda fila1, col0 <-> derecha fila1, col19
+  // Forzar que esas celdas sean muros (para que se vea el agujero)
+  if (maze[1] && maze[1][0] !== undefined) maze[1][0] = 1;
+  if (maze[1] && maze[1][19] !== undefined) maze[1][19] = 1;
+  // Eliminar posibles puntos o ítems en esas celdas
+  dots = dots.filter(d => !(d.r === 1 && d.c === 0));
+  dots = dots.filter(d => !(d.r === 1 && d.c === 19));
+  apples = apples.filter(a => !(a.r === 1 && a.c === 0));
+  apples = apples.filter(a => !(a.r === 1 && a.c === 19));
+  if (dynamite && ((dynamite.r === 1 && dynamite.c === 0) || (dynamite.r === 1 && dynamite.c === 19))) dynamite = null;
+  if (heart && ((heart.r === 1 && heart.c === 0) || (heart.r === 1 && heart.c === 19))) heart = null;
 
-
-
-    // Par 2: izquierda de la salida <-> esquina inferior izquierda (fila 20, columna 0)
-    if (exitCell && exitCell.c > 0) {
-      const leftOfExit = { r: exitCell.r, c: exitCell.c - 1 };
-      
-       // Par 2: izquierda fila1, col0 <-> derecha fila1, col19
-       tunnels.push({
-         r: 1, c: 0,
-         targetR: 1, targetC: 19,
-         exitDirX: 1, exitDirY: 0   // salida hacia la derecha (desde pared izquierda)
-       });
-       tunnels.push({
-         r: 1, c: 19,
-         targetR: 1, targetC: 0,
-         exitDirX: -1, exitDirY: 0  // salida hacia la izquierda (desde pared derecha)
-       });
-     
-     
-      
-    }
-
-
-
-
-   
-  }
+  tunnels.push({
+    r: 1, c: 0,
+    targetR: 1, targetC: 19,
+    exitDirX: 1, exitDirY: 0   // salida hacia la derecha (desde pared izquierda)
+  });
+  tunnels.push({
+    r: 1, c: 19,
+    targetR: 1, targetC: 0,
+    exitDirX: -1, exitDirY: 0  // salida hacia la izquierda (desde pared derecha)
+  });
 }
-
 // ---------- FIN TÚNELES ----------
 
 document.addEventListener('touchstart', e => {
@@ -397,7 +392,7 @@ function initLevel() {
     }
   }
 
-  // Configurar túneles (depende de la salida)
+  // Configurar túneles (después de tener el maze y los items)
   setupTunnels();
 
   gameOver = false;
@@ -796,7 +791,6 @@ function draw() {
 }
 
 let PACMAN_SPEED = 5;
-const PACMAN_SPEED_MIN = 5;
 let speedFactor = 1.0;
 let initialSpeedFactor = 1.0;
 const SPEED_DELTA = 0.5 / 29;
