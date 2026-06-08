@@ -783,8 +783,11 @@ function draw() {
   ctx.moveTo(px, py);
   ctx.arc(px, py, pr, angle + mouthAngle*Math.PI, angle + (2-mouthAngle)*Math.PI);
   ctx.closePath(); ctx.fill();
-  const eyeX = px + Math.cos(angle - Math.PI/4)*pr*0.5;
-  const eyeY = py + Math.sin(angle - Math.PI/4)*pr*0.5;
+  // Ojo siempre arriba, desplazado horizontalmente hacia donde mira
+  let eyeOffsetX = pacDir.x * pr * 0.4;
+  let eyeOffsetY = -pr * 0.5; // siempre hacia arriba
+  const eyeX = px + eyeOffsetX;
+  const eyeY = py + eyeOffsetY;
   ctx.fillStyle = '#000';
   ctx.beginPath(); ctx.arc(eyeX, eyeY, pr*0.12, 0, Math.PI*2); ctx.fill();
 }
