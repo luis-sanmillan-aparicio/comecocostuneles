@@ -199,13 +199,13 @@ function setupTunnels() {
     if (leftOfExit.c >= 0 && leftOfExit.c < COLS) {
       tunnels.push({
         r: leftOfExit.r, c: leftOfExit.c,
-        targetR: ROWS-1, targetC: 1,
-        exitDirX: 1, exitDirY: 0   // salida hacia DERECHA
+        targetR: ROWS-1, targetC: 0,   // ← ahora columna 0
+        exitDirX: 1, exitDirY: 0
       });
       tunnels.push({
-        r: ROWS-1, c: 1,
+        r: ROWS-1, c: 0,               // ← ahora columna 0
         targetR: leftOfExit.r, targetC: leftOfExit.c,
-        exitDirX: 1, exitDirY: 0   // salida hacia DERECHA
+        exitDirX: 1, exitDirY: 0
       });
     }
   }
